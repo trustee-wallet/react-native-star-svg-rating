@@ -1,6 +1,6 @@
 {
   "name": "react-native-star-svg-rating",
-  "version": "1.8.1",
+  "version": "1.8.3",
   "description": "A star rating widget for react native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
