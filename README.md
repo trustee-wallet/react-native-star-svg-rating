@@ -1,4 +1,4 @@
-# react-native-star-rating-widget
+# react-native-star-rating-svg
 
 [![npm version](https://badge.fury.io/js/react-native-star-svg-rating.svg)](https://badge.fury.io/js/react-native-star-svg-rating)
 
@@ -7,7 +7,7 @@ A customizable, animated star rating component for React Native. Compatible with
 ![Demo](https://github.com/trustee-wallet/react-native-star-svg-rating/raw/master/media/demo.gif)
 
 ## Installation
-1. install react-native-star-rating-widget
+1. install react-native-star-rating-svg
 `npm install react-native-star-rating-svg --save` or `yarn add react-native-star-rating-svg`
 2. if not already installed, add [react-native-svg](https://github.com/react-native-community/react-native-svg)
 
