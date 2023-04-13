@@ -6,7 +6,9 @@ import { getStars } from './utils';
 type Props = {
   rating: number;
   color?: string;
+  borderColor?: string;
   emptyColor?: string;
+  emptyBorderColor?: string;
   maxStars?: number;
   starSize?: number;
   enableHalfStar?: boolean;
@@ -17,13 +19,16 @@ type Props = {
 };
 
 const defaultColor = '#fdd835';
+const defaultEmptyColor = '#404040';
 
 const StarRatingDisplay = ({
   rating,
   maxStars = 5,
   starSize = 32,
   color = defaultColor,
-  emptyColor = color,
+  borderColor = color,
+  emptyColor = defaultEmptyColor,
+  emptyBorderColor = emptyColor,
   style,
   starStyle,
   StarIconComponent = StarIcon,
@@ -38,6 +43,9 @@ const StarRatingDisplay = ({
               type={starType}
               size={starSize}
               color={starType === 'empty' ? emptyColor : color}
+              borderColor={
+                starType === 'empty' ? emptyBorderColor : borderColor
+              }
             />
           </View>
         );

@@ -1,6 +1,6 @@
 {
-  "name": "react-native-star-rating-widget",
-  "version": "1.7.1",
+  "name": "react-native-star-svg-rating",
+  "version": "1.8.1",
   "description": "A star rating widget for react native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -40,13 +40,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/bviebahn/react-native-star-rating-widget",
-  "author": "Benedikt Viebahn <bviebahn@pm.me> (https://github.com/bviebahn)",
+  "repository": "https://github.com/trustee-wallet/react-native-star-svg-rating",
+  "author": "Trustee Wallet (https://github.com/trustee-wallet)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bviebahn/react-native-star-rating-widget/issues"
+    "url": "https://github.com/trustee-wallet/react-native-star-svg-rating/issues"
   },
-  "homepage": "https://github.com/bviebahn/react-native-star-rating-widget#readme",
+  "homepage": "https://github.com/trustee-wallet/react-native-star-svg-rating#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

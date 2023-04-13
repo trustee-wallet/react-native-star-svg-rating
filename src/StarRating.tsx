@@ -24,21 +24,25 @@ type StarRatingProps = {
   onChange: (rating: number) => void;
   minRating?: number;
   color?: string;
+  borderColor?: string;
   emptyColor?: string;
+  emptyBorderColor?: string;
   maxStars?: number;
   starSize?: number;
   enableHalfStar?: boolean;
   enableSwiping?: boolean;
   onRatingStart?: () => void;
-  onRatingEnd?: () => void;
+  onRatingEnd?: (value: any) => void;
   style?: StyleProp<ViewStyle>;
   starStyle?: StyleProp<ViewStyle>;
   animationConfig?: AnimationConfig;
   StarIconComponent?: (props: StarIconProps) => JSX.Element;
   testID?: string;
+  disabled?: boolean;
 };
 
 const defaultColor = '#fdd835';
+const defaultEmptyColor = '#404040';
 const defaultAnimationConfig: Required<AnimationConfig> = {
   easing: Easing.elastic(2),
   duration: 300,
@@ -52,7 +56,9 @@ const StarRating: React.FC<StarRatingProps> = ({
   starSize = 32,
   onChange,
   color = defaultColor,
-  emptyColor = color,
+  borderColor = color,
+  emptyColor = defaultEmptyColor,
+  emptyBorderColor = emptyColor,
   enableHalfStar = true,
   enableSwiping = true,
   onRatingStart,
@@ -62,30 +68,44 @@ const StarRating: React.FC<StarRatingProps> = ({
   starStyle,
   StarIconComponent = StarIcon,
   testID,
+  disabled = false,
 }) => {
   const width = React.useRef<number>();
   const [isInteracting, setInteracting] = React.useState(false);
 
-  const handleInteraction = React.useCallback(
-    (x: number, isRTL = I18nManager.isRTL) => {
+  const getCurrentRate = React.useCallback(
+    (x: number) => {
       if (width.current) {
-        if (isRTL) {
-          handleInteraction(width.current - x, false);
-          return;
-        }
-        const newRating = Math.max(
+        const _rating = Math.max(
           0,
           Math.min(
             Math.round((x / width.current) * maxStars * 2 + 0.2) / 2,
             maxStars
           )
         );
+        return _rating;
+      } else {
+        return 0;
+      }
+    },
+    [maxStars]
+  );
+
+  const handleInteraction = React.useCallback(
+    (x: number, isRTL = I18nManager.isRTL) => {
+      if (disabled) return;
+      if (width.current) {
+        if (isRTL) {
+          handleInteraction(width.current - x, false);
+          return;
+        }
+        const newRating = getCurrentRate(x);
         if (newRating !== rating) {
           onChange(enableHalfStar ? newRating : Math.ceil(newRating));
         }
       }
     },
-    [enableHalfStar, maxStars, onChange, rating]
+    [disabled, getCurrentRate, rating, onChange, enableHalfStar]
   );
 
   const panResponder = React.useMemo(() => {
@@ -95,17 +115,21 @@ const StarRating: React.FC<StarRatingProps> = ({
       onMoveShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponderCapture: () => true,
       onPanResponderMove: (e) => {
+        if (disabled) return;
         if (enableSwiping) {
           handleInteraction(e.nativeEvent.locationX);
         }
       },
       onPanResponderStart: (e) => {
+        if (disabled) return;
         onRatingStart?.();
         handleInteraction(e.nativeEvent.locationX);
         setInteracting(true);
       },
-      onPanResponderEnd: () => {
-        onRatingEnd?.();
+      onPanResponderEnd: (e) => {
+        if (disabled) return;
+        const currentRate = getCurrentRate(e.nativeEvent.locationX);
+        onRatingEnd?.(enableHalfStar ? currentRate : Math.ceil(currentRate));
         setTimeout(() => {
           setInteracting(false);
         }, animationConfig.delay || defaultAnimationConfig.delay);
@@ -117,6 +141,9 @@ const StarRating: React.FC<StarRatingProps> = ({
     handleInteraction,
     onRatingStart,
     onRatingEnd,
+    disabled,
+    getCurrentRate,
+    enableHalfStar,
   ]);
 
   return (
@@ -141,6 +168,9 @@ const StarRating: React.FC<StarRatingProps> = ({
                 type={starType}
                 size={starSize}
                 color={starType === 'empty' ? emptyColor : color}
+                borderColor={
+                  starType === 'empty' ? emptyBorderColor : borderColor
+                }
               />
             </AnimatedIcon>
           );
